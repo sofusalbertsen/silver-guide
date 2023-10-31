@@ -99,13 +99,20 @@ We will change the values of the WordPress deployment by using a values file. Th
 - Change your manifest to use the `values.yaml` file by changing `spec.source` to `spec.sources` like the following:
 
 ``` yaml
-project: default
-destination:
-  namespace: student-X
-  name: in-cluster
-syncPolicy:
-  automated: {}
-sources:
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: student<PREFIX>-wordpress
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    name: ''
+    namespace: student-0
+    server: 'https://kubernetes.default.svc'
+  sources:
   - repoURL: 'https://charts.bitnami.com/bitnami'
     targetRevision: 18.0.8
     helm:
